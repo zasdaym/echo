@@ -76,7 +76,8 @@ async fn echo_handler(
 #[tokio::main]
 async fn main() {
     let router = Router::new().route("/", any(echo_handler));
-    let listener = TcpListener::bind("127.0.0.1:8080").await.unwrap();
+    let listen_addr = std::env::var("LISTEN_ADDR").unwrap_or("0.0.0.0:8080".to_string());
+    let listener = TcpListener::bind(listen_addr).await.unwrap();
     println!("listening on {}", listener.local_addr().unwrap());
     serve(
         listener,
